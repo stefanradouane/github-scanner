@@ -1,58 +1,39 @@
-// import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+import { octokit } from "../octokit/octokit";
 
-import { Octokit, App } from "https://cdn.skypack.dev/octokit";
-// const octokit = new Octokit({
-//     auth: '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'
-// })
-
-// await octokit.request('GET /user', {
-// headers: {
-//     'X-GitHub-Api-Version': '2022-11-28',
-// }
-// })
-
-// import { Octokit, App } from "octokit";
-// const octokit = new Octokit({ auth: '' });
-
-// export default function api () {
-//     return {"data": { login }} = await octokit.rest.users.getAuthenticated();
-//     console.log("Hello, %s", login);
-// }
-
-// const octokit = new Octokit({ auth: `personal-access-token123` });
 class Api {
-    get = async (endpoint) => {
-        const response = await fetch(endpoint)
+  get = async (endpoint) => {
+    const response = await octokit().request("GET /users");
 
-        // const response = await fetch(endpoint, {headers: {
-        //     "Content-Type": "application/json",
-        //     // "Authorization": "token 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",
-        //     // 'Content-Type': 'application/x-www-form-urlencoded',
-        //   },});
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        const data = response.json()
-        return data
-    };
-
-    post = async (endpoint, body) => {
-        const response = await fetch(endpoint, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        })
-
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-
-        const data = response.json()
-        return data
+    // If response is not 200
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
     }
+
+    console.log(response);
+
+    console.log(
+      `Remaining fetches: ${response.headers["x-ratelimit-remaining"]}`
+    );
+
+    return response.data;
+  };
+
+  post = async (endpoint, body) => {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = response.json();
+    return data;
+  };
 }
 
-export const api = new Api
+export const api = new Api();
