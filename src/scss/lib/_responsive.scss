@@ -1,0 +1,19 @@
+:root {
+    --base-offset: 16px;
+    --columns: repeat(1, minmax(0, 1fr));
+    --header-height: 80px;
+}
+
+@media (min-width: 768px) {
+    :root {
+        --base-offset: 20px;
+        --columns: repeat(2, minmax(0, 1fr));
+
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --base-offset: 40px;
+    }
+}

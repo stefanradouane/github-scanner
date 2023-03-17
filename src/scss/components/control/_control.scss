@@ -9,6 +9,8 @@
   background-color: $color-black;
   cursor: pointer;
   transition: border-color 0.25s;
+  // color: $prim-color;
+  // filter: invert(0.17) sepia(1) saturate(20) hue-rotate(226.8deg) brightness(1.2);
 
   &:hover {
     border-color: $prim-color;
@@ -19,12 +21,21 @@
     outline: 1px auto -webkit-focus-ring-color;
   }
 
+  #control-icon svg {
+    fill: #ff0000;
+  }
+
   .icon {
     // height: ;
     // padding: 1.5em;
+    fill: #ff0000;
     will-change: filter;
     transition: filter 300ms;
     pointer-events: none;
+
+    svg {
+      fill: #ff0000;
+    }
   }
 
   &:hover .icon {

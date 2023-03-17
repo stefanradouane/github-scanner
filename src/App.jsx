@@ -1,36 +1,106 @@
 import { useState } from "react";
-import githubLogo from "./assets/github.svg";
-import loopIcon from "./assets/loop.svg";
-import { api } from "./components/api/api";
-import { form } from "./components/form/form";
 import { useEffect } from "react";
 import { Search } from "./components/search/search";
-// import './App.scss'
+import loadingIcon from "./assets/loading.svg";
+import loopIcon from "./assets/loop.svg";
+import getElement from "./components/getElement/getElement";
+import Home from "./components/home/home";
+import Portfolio from "./components/portfolio/portfolio";
+import { parseQuery } from "./components/url/url";
+import { api } from "./components/api/api";
 
 function App() {
-  const [data, setData] = useState([]);
-  const [image, setImage] = useState(githubLogo);
+  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  const [data, setData] = useState({ message: "" });
+  const [defaultValue, setDefaultValue] = useState("");
 
   useEffect(() => {
-    console.log(data);
+    setQuery(parseQuery(window.location).name);
+  }, []);
+  // useEffect(() => {
+  //   return;
+  //   console.log(defaultValue);
+  // }, [defaultValue]);
+
+  useEffect(() => {
+    setLoading(false);
+    if (data.user?.id) {
+      getElement(".home").classList.add("home--result-found");
+      getElement(".search", true).forEach((form) => {
+        form.dataset.error = "";
+      });
+    } else {
+      getElement(".home").classList.remove("home--result-found");
+      getElement(".search", true).forEach((form) => {
+        form.dataset.error = data.message;
+      });
+    }
   }, [data]);
 
-  const searchQuery = (e) => {};
+  useEffect(() => {
+    // loading-state changes to true
+    if (loading) {
+      // Update icons
+      getElement(".icon.icon--search", true).forEach((icon) => {
+        icon.src = loadingIcon;
+      });
+      // loading-state changes to false
+    } else {
+      // Update icon
+      getElement(".icon.icon--search", true).forEach((icon) => {
+        icon.src = loopIcon;
+      });
+    }
+  }, [loading]);
 
-  // console.log(api.get("https://api.github.com/users/stefanradouane"))
+  useEffect(() => {
+    setDefaultValue(query);
+    setLoading(true);
+    if (query == undefined) {
+      getElement(".home").classList.remove("home--result-found");
+      setLoading(false);
+    } else if (query == "") {
+      setData({ message: "" });
+      getElement(".home").classList.remove("home--result-found");
+      setLoading(false);
+    } else {
+      api
+        .get(query)
+        .then((data) => {
+          setData(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    }
+  }, [query]);
+
+  if (data.message) {
+    return (
+      <Home
+        defaultValue={defaultValue}
+        setDefaultValue={setDefaultValue}
+        setQuery={setQuery}
+      />
+    );
+  }
+
   return (
-    <section>
-      <img src={image} className="logo" alt="Github logo" />
-      <h1 className="title title--h1">GitHub</h1>
-      <h2 className="title title--h2">Scanner</h2>
-      {Search.node(setData)}
-      {/* <form className="search">
-      <input className="search__input" type="text" name="query" />
-      <button className="control" onClick={searchQuery}>
-        <img src={loopIcon} className="icon icon--loop" alt="Loop logo" />
-      </button>
-    </form> */}
-    </section>
+    <>
+      <Home
+        defaultValue={defaultValue}
+        setDefaultValue={setDefaultValue}
+        setQuery={setQuery}
+      />
+      <Portfolio
+        data={data}
+        defaultValue={defaultValue}
+        setDefaultValue={setDefaultValue}
+        setQuery={setQuery}
+      />
+    </>
   );
 }
 

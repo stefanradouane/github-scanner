@@ -16,7 +16,8 @@
     "octokit": "^2.0.14",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-prism": "^4.3.2"
+    "react-prism": "^4.3.2",
+    "three": "^0.150.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

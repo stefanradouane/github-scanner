@@ -1,0 +1,30 @@
+header {
+    display: flex;
+    height: 5em;
+    padding: 1em;
+    background-color: $dark-color;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+
+    section {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        gap: 10px;
+    }
+
+    span {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+    }
+
+    img {
+        height: 100%;
+    }
+
+    .search {
+        margin-right: auto;
+    }
+}
