@@ -9,7 +9,7 @@ export default function createObject(variables) {
   const color = new THREE.Color();
 
   for (let i = 0; i < variables.count; i++) {
-    let geometry = new THREE.BoxGeometry();
+    let geometry = new THREE.SphereGeometry(5, 32, 32);
 
     const position = new THREE.Vector3();
     position.x = Math.random() * 2500 - 1250;
@@ -23,9 +23,10 @@ export default function createObject(variables) {
 
     const scale = new THREE.Vector3();
     if (i != 0) {
-      scale.x = Math.random() * 200 + 100;
-      scale.y = Math.random() * 200 + 100;
-      scale.z = Math.random() * 200 + 100;
+      const size = Math.random() * 30 + 15;
+      scale.x = size;
+      scale.y = size;
+      scale.z = size;
     } else {
       scale.x = 0;
       scale.y = 0;

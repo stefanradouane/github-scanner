@@ -40,7 +40,7 @@ export default function threeConfig(element) {
     pickingTexture: new THREE.WebGLRenderTarget(1, 1, 1),
     pickingScene: new THREE.Scene(),
     highlightBox: new THREE.Mesh(
-      new THREE.BoxGeometry(),
+      new THREE.SphereGeometry(5, 32, 32),
       new THREE.MeshLambertMaterial({
         color: new THREE.Color(0x000000),
       })
